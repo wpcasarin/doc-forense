@@ -1,4 +1,5 @@
 import { AddEvidence } from './AddEvidence';
+import { AddMapImage } from './AddMapImage';
 import { DownloadTemplateButton } from './DownloadTemplateButton';
 import { NewTemplateButton } from './NewTemplateButton';
 import { PageNavigation } from './PageNavigation';
@@ -9,12 +10,11 @@ import { type Component } from 'solid-js';
 
 export const EditorHeader: Component = () => {
   return (
-    <header class="bg-white mt-10 rounded-t-lg border-b-2 w-full max-w-[8.27in] flex flex-row justify-between items-center p-4">
+    <header class="bg-white mt-10 rounded-t-lg border-b-2 w-full max-w-[8.27in] grid grid-cols-3 grid-rows-1 p-4">
       <TemplateNameInput />
       <PageNavigation />
-      <div class="flex flex-row gap-2 relative">
+      <div class="flex flex-row gap-2 relative justify-self-end">
         <AddEvidence />
-        <TemplateListModal />
         <details class="dropdown dropdown-end">
           <summary class="btn btn-square btn-sm">
             <svg
@@ -38,6 +38,12 @@ export const EditorHeader: Component = () => {
             </li>
             <li>
               <SaveTemplateButton />
+            </li>
+            <li>
+              <TemplateListModal />
+            </li>
+            <li>
+              <AddMapImage />
             </li>
             <li>
               <DownloadTemplateButton />

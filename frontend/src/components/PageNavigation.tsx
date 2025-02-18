@@ -41,7 +41,7 @@ export const PageNavigation: Component = () => {
   };
 
   return (
-    <div class="join m-0 p-0">
+    <div class="join m-0 p-0 justify-self-center">
       <button
         disabled={currentDocument().pageNum <= 1}
         onclick={prevPage}

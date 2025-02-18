@@ -17,6 +17,8 @@ from .models import TextAlignment
 load_dotenv()
 GALILEU_TOKEN = os.getenv("GALILEU_TOKEN")
 GALILEU_URL = os.getenv("GALILEU_URL")
+MAPBOX_TOKEN = os.getenv("MAPBOX_TOKEN")
+POCKETBASE_URL = os.getenv("POCKETBASE_URL")
 
 app = FastAPI()
 
@@ -72,7 +74,6 @@ def process_template_data(document: dict):
     return processed_result
 
 
-# Function to save the processed result to a DOCX file
 def save_processed_result_to_docx(processed_result: dict):
 
     document = Document()
@@ -232,9 +233,7 @@ def save_processed_result_to_docx(processed_result: dict):
 
 @app.post("/templates/")
 async def receive_template_record(record: dict):
-    """
-    Endpoint to receive a raw JSON object (dict), process it, and save the result to a DOCX file.
-    """
+
     try:
         processed_data = process_template_data(record)
 
@@ -276,3 +275,48 @@ async def get_galileu_data(laudo: int):
         )
 
     return response.json()
+
+
+async def upload_image_to_pocketbase(image_bytes: bytes) -> str:
+    collection = "images"
+
+    file_tuple = ("image.jpg", image_bytes, "image/jpeg")
+    files = {"file": file_tuple}
+
+    async with httpx.AsyncClient() as client:
+        response = await client.post(
+            f"{POCKETBASE_URL}/api/collections/{collection}/records", files=files
+        )
+    response.raise_for_status()
+
+    record = response.json()
+    record_id = record.get("id")
+    file_name = record.get("file")
+
+    return f"{POCKETBASE_URL}/api/files/{collection}/{record_id}/{file_name}"
+
+
+@app.post("/mapbox/")
+async def get_mapbox_img(lon: float, lat: float, zoom: float):
+    pb_url = (
+        f"https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/"
+        f"pin-s+555555({lon},{lat})/{lon},{lat},{zoom},0/512x512"
+        f"?access_token={MAPBOX_TOKEN}"
+    )
+
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(pb_url)
+            response.raise_for_status()
+    except httpx.RequestError as exc:
+        raise HTTPException(
+            status_code=500,
+            detail=f"An error occurred while requesting the external API: {exc}",
+        )
+    except httpx.HTTPStatusError as exc:
+        raise HTTPException(
+            status_code=exc.response.status_code,
+            detail=f"External API error: {exc.response.text}",
+        )
+    data = await upload_image_to_pocketbase(response.content)
+    return {"url": data}

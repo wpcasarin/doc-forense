@@ -1,0 +1,14 @@
+@import 'tailwindcss';
+@plugin "daisyui";
+
+@layer base {
+  h1.ce-header {
+    font-size: var(--text-4xl);
+  }
+  h2.ce-header {
+    font-size: var(--text-2xl);
+  }
+  h3.ce-header {
+    font-size: var(--text-xl);
+  }
+}

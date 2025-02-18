@@ -1,0 +1,33 @@
+{
+  "name": "df-editor",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@editorjs/editorjs": "^2.30.8",
+    "@editorjs/header": "^2.8.8",
+    "@editorjs/image": "^2.10.2",
+    "@editorjs/list": "^2.0.4",
+    "@editorjs/paragraph": "^2.11.7",
+    "@editorjs/table": "^2.4.3",
+    "@editorjs/underline": "^1.2.1",
+    "@tailwindcss/vite": "^4.0.6",
+    "editor-js-alignment-tune": "^1.0.1",
+    "editorjs-break-line": "^1.0.10",
+    "pocketbase": "^0.25.1",
+    "solid-js": "^1.9.4",
+    "tailwindcss": "^4.0.6",
+    "ulid": "^2.3.0"
+  },
+  "devDependencies": {
+    "daisyui": "^5.0.0-beta.8",
+    "typescript": "~5.7.2",
+    "vite": "^6.1.0",
+    "vite-plugin-solid": "^2.11.0"
+  }
+}
